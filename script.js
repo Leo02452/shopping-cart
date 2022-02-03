@@ -30,7 +30,9 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-
+  const clickedItem = event.target;
+  // Ideia do Nailton de usar um remove simples.
+  clickedItem.remove();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
