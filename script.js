@@ -53,18 +53,27 @@ const showItems = async () => {
       .appendChild(item);
   });
 };
+const ol = document.querySelector('.cart__items');
+
+const addToCart = async (event) => {
+  const clickedItem = event.target.parentNode;
+  const productId = getSkuFromProductItem(clickedItem);
+  const product = await fetchItem(productId);
+  const { id, title, price } = product;
+  const cartItem = createCartItemElement({ sku: id, name: title, salePrice: price });
+  ol.appendChild(cartItem);
+  saveCartItems(ol.innerHTML);
+};
+
+const recreateElement = () => {
+  ol.innerHTML = getSavedCartItems();
+  ol.addEventListener('click', cartItemClickListener);
+};
 
 window.onload = async () => {
   await showItems();
   const addToCartButton = document.querySelectorAll('.item__add');
+  addToCartButton.forEach((button) => button.addEventListener('click', addToCart));
 
-  addToCartButton.forEach((button) => button.addEventListener('click', (event) => {
-    const clickedItem = event.target.parentNode;
-    fetchItem(getSkuFromProductItem(clickedItem))
-    .then((product) => {
-      const { id, title, price } = product;
-      document.querySelector('.cart__items')
-        .appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
-      });
-    }));
+  recreateElement();
 };
