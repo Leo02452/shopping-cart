@@ -58,8 +58,23 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+const showWaitingMessage = () => {
+  const span = document.createElement('span');
+  span.className = 'loading';
+  span.innerText = 'carregando...';
+  const container = document.querySelector('.container');
+  container.appendChild(span);
+};
+
+const endingWaitingMessage = () => {
+  const loadingSpan = document.querySelector('.container span');
+  loadingSpan.remove();
+};
+
 const showItems = async () => {
+  showWaitingMessage();
   const response = await fetchProducts('computador');
+  endingWaitingMessage();
   const { results } = response;
   results.forEach((product) => {
     const { id, title, thumbnail } = product;
