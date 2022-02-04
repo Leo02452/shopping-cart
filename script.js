@@ -29,10 +29,25 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+const ol = document.querySelector('.cart__items');
+
+// Ajuda do Imar Mendes pra montar a lógica da função
+const updatePrice = () => {
+  const price = document.querySelector('.total-price');
+  const cartItems = document.querySelectorAll('.cart__item');
+  let counter = 0;
+  cartItems.forEach((cartItem) => {
+    const x = parseFloat(cartItem.innerText.split('$')[1]);
+    counter += x;
+  });
+  price.innerText = counter;
+};
+
 function cartItemClickListener(event) {
   const clickedItem = event.target;
   // Ideia do Nailton de usar um remove simples.
   clickedItem.remove();
+  updatePrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -53,7 +68,6 @@ const showItems = async () => {
       .appendChild(item);
   });
 };
-const ol = document.querySelector('.cart__items');
 
 const addToCart = async (event) => {
   const clickedItem = event.target.parentNode;
@@ -63,11 +77,13 @@ const addToCart = async (event) => {
   const cartItem = createCartItemElement({ sku: id, name: title, salePrice: price });
   ol.appendChild(cartItem);
   saveCartItems(ol.innerHTML);
+  updatePrice();
 };
 
 const recreateElement = () => {
   ol.innerHTML = getSavedCartItems();
-  ol.addEventListener('click', cartItemClickListener);
+  const cartItems = document.querySelectorAll('.cart__item');
+  cartItems.forEach((cartItem) => cartItem.addEventListener('click', cartItemClickListener));
 };
 
 const emptyButton = document.querySelector('.empty-cart');
@@ -82,4 +98,5 @@ window.onload = async () => {
   addToCartButton.forEach((button) => button.addEventListener('click', addToCart));
 
   recreateElement();
+  updatePrice();
 };
