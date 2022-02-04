@@ -70,6 +70,12 @@ const recreateElement = () => {
   ol.addEventListener('click', cartItemClickListener);
 };
 
+const emptyButton = document.querySelector('.empty-cart');
+emptyButton.addEventListener('click', () => {
+  ol.innerHTML = '';
+  saveCartItems(ol.innerHTML);
+});
+
 window.onload = async () => {
   await showItems();
   const addToCartButton = document.querySelectorAll('.item__add');
