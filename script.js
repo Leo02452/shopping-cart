@@ -29,25 +29,25 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-const ol = document.querySelector('.cart__items');
+const olContainer = document.querySelector('.cart__items');
 
 // Ajuda do Imar Mendes pra montar a lógica da função
-const updatePrice = () => {
-  const price = document.querySelector('.total-price');
+const updateCartPrice = () => {
+  const totalPrice = document.querySelector('.total-price');
   const cartItems = document.querySelectorAll('.cart__item');
   let counter = 0;
   cartItems.forEach((cartItem) => {
-    const x = parseFloat(cartItem.innerText.split('$')[1]);
-    counter += x;
+    const itemPrice = parseFloat(cartItem.innerText.split('$')[1]);
+    counter += itemPrice;
   });
-  price.innerText = counter;
+  totalPrice.innerText = counter;
 };
 
 function cartItemClickListener(event) {
   const clickedItem = event.target;
   // Ideia do Nailton de usar um remove simples.
   clickedItem.remove();
-  updatePrice();
+  updateCartPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -86,32 +86,34 @@ const showItems = async () => {
 
 const addToCart = async (event) => {
   const clickedItem = event.target.parentNode;
-  const productId = getSkuFromProductItem(clickedItem);
-  const product = await fetchItem(productId);
-  const { id, title, price } = product;
+  const itemId = getSkuFromProductItem(clickedItem);
+  const item = await fetchItem(itemId);
+  const { id, title, price } = item;
   const cartItem = createCartItemElement({ sku: id, name: title, salePrice: price });
-  ol.appendChild(cartItem);
-  saveCartItems(ol.innerHTML);
-  updatePrice();
+  olContainer.appendChild(cartItem);
+  saveCartItems(olContainer.innerHTML);
+  updateCartPrice();
 };
 
-const recreateElement = () => {
-  ol.innerHTML = getSavedCartItems();
+const recreateCart = () => {
+  olContainer.innerHTML = getSavedCartItems();
   const cartItems = document.querySelectorAll('.cart__item');
   cartItems.forEach((cartItem) => cartItem.addEventListener('click', cartItemClickListener));
 };
 
 const emptyButton = document.querySelector('.empty-cart');
 emptyButton.addEventListener('click', () => {
-  ol.innerHTML = '';
-  saveCartItems(ol.innerHTML);
+  olContainer.innerHTML = '';
+  updateCartPrice();
+  saveCartItems(olContainer.innerHTML);
 });
 
 window.onload = async () => {
   await showItems();
-  const addToCartButton = document.querySelectorAll('.item__add');
-  addToCartButton.forEach((button) => button.addEventListener('click', addToCart));
 
-  recreateElement();
-  updatePrice();
+  const addToCartButtons = document.querySelectorAll('.item__add');
+  addToCartButtons.forEach((button) => button.addEventListener('click', addToCart));
+
+  recreateCart();
+  updateCartPrice();
 };
