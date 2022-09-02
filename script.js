@@ -47,6 +47,7 @@ function cartItemClickListener(event) {
   const clickedItem = event.target;
   // Ideia do Nailton de usar um remove simples.
   clickedItem.remove();
+  saveCartItems(olContainer.innerHTML);
   updateCartPrice();
 }
 
@@ -85,7 +86,7 @@ const showItems = async () => {
 };
 
 const addToCart = async (event) => {
-  const clickedItem = event.target.parentNode;
+  const clickedItem = event.target.parentElement;
   const itemId = getSkuFromProductItem(clickedItem);
   const item = await fetchItem(itemId);
   const { id, title, price } = item;
