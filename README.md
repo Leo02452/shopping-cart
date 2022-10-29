@@ -14,7 +14,7 @@
 
 ## :page_facing_up: Descrição
 
-Esse foi um projeto desenvolvido na Trybe usando HTML, CSS, Javascript e a API do Mercado Livre. O desafio proposto no projeto foi criar uma aplicação de e-commerce com carrinho de compras totalmente dinâmico.
+Esse foi um projeto desenvolvido na [Trybe](https://www.betrybe.com/) usando HTML, CSS, Javascript e a API do Mercado Livre. O desafio proposto no projeto foi criar uma aplicação de e-commerce com carrinho de compras totalmente dinâmico.
 
 Além disso, foram desenvolvidos testes para ter uma aplicação mais segura e consistente.
 
